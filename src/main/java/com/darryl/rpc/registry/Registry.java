@@ -1,5 +1,7 @@
 package com.darryl.rpc.registry;
 
+import java.util.List;
+
 /**
  * @Auther: Darryl
  * @Description: 注册中心的接口，方便我们以后扩展多种注册中心的选择
@@ -13,4 +15,12 @@ public interface Registry {
 	 * @param registryInfo 本机的注册信息
 	 */
 	void register(Class clazz, RegistryInfo registryInfo) throws Exception;
+
+	/**
+	 * 从注册中心获取
+	 * @param clazz
+	 * @return 注册信息列表
+	 * @throws Exception
+	 */
+	List fetchRegistry(Class clazz) throws Exception;
 }

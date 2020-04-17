@@ -84,4 +84,27 @@ public class ZookeeperRegistry implements Registry {
 			}
 		}
 	}
+
+	@Override
+	public List fetchRegistry(Class clazz) throws Exception {
+		Method[] methods = clazz.getDeclaredMethods();
+		List registryInfos = null;
+		for (Method method : methods) {
+			String key = InvokeUtils.buildInterfaceMethodIdentify(clazz, method);
+			String path = ROOT_PATH + "/" + key;
+			Stat stat = client.checkExists().forPath(path);
+			if (stat == null) {
+				// 可以利用zookeeper的watcher机制监听节点的变化
+				log.warn("there is no infomation: {} on ZOOKEEPER!!!", key);
+				continue;
+			}
+			// TODO: 这里如果一个接口类暴露了多个方法，此处处理需要验证调整
+			if (registryInfos == null) {
+				byte[] bytes = client.getData().forPath(path);
+				String data = new String(bytes, StandardCharsets.UTF_8);
+				registryInfos = JSONArray.parseArray(data, RegistryInfo.class);
+			}
+		}
+		return registryInfos;
+	}
 }
