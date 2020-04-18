@@ -21,6 +21,6 @@ public class TestProducer {
 		ServiceConfig config = new ServiceConfig<>(HelloService.class, service);
 		List serviceConfigList = new ArrayList<>();
 		serviceConfigList.add(config);
-		ApplicationContext ctx = new ApplicationContext(connectionString, serviceConfigList);
+		ApplicationContext ctx = new ApplicationContext(connectionString, serviceConfigList, null , 8888);
 	}
 }
